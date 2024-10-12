@@ -1,0 +1,14 @@
+- name: Set up users
+  become: true
+  tags:
+    - configuration
+    - general_settings
+  block:
+    - name: Set hostname
+      ansible.builtin.hostname:
+        name: "{{ hostname }}"
+    - name: Set timezone to utc
+      become: true
+      community.general.timezone:
+        hwclock: "UTC"
+        name: "Europe/Zurich"

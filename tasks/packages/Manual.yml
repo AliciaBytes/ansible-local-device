@@ -1,0 +1,121 @@
+- name: Upgrade packages and clean up old packages
+  block:
+    # Install rustup
+    - name: Gather installed rustup version, if there is any
+      shell:
+        cmd: rustup --version
+      register: rustup
+      check_mode: false
+      changed_when: false
+      failed_when: rustup.rc != 0 and rustup.rc != 127
+    - block:
+      - name: Create temporary file for rustup script
+        ansible.builtin.tempfile:
+          state: file
+          suffix: temp
+        register: rustup_script
+      - name: Download rustup install script
+        ansible.builtin.get_url:
+          url: https://sh.rustup.rs
+          dest: "{{ rustup_script.path }}"
+          mode: "700"
+          force: true
+        when: rustup.rc != 0
+      - name: Install rustup
+        ansible.builtin.script:
+          cmd: "{{ rustup_script.path }} -y"
+        when: rustup.rc != 0
+      - name: Remove file
+        ansible.builtin.file:
+          path: "{{ rustup_script.path}}"
+          state: absent
+      when: rustup.rc != 0
+      check_mode: false
+      # Install atuin
+    - name: Gather installed atuin version, if there is any
+      shell:
+        cmd: atuin --version
+      register: atuin
+      check_mode: false
+      changed_when: false
+      failed_when: atuin.rc != 0 and atuin.rc != 127
+    - block:
+      - name: Create temporary file for atuin script
+        ansible.builtin.tempfile:
+          state: file
+          suffix: temp
+        register: atuin_script
+      - name: Download atuin install script
+        ansible.builtin.get_url:
+          url: https://setup.atuin.sh
+          dest: "{{ atuin_script.path }}"
+          mode: "700"
+          force: true
+      - name: Install atuin
+        ansible.builtin.script:
+          cmd: "{{ atuin_script.path }}"
+      - name: Remove file
+        ansible.builtin.file:
+          path: "{{ atuin_script.path}}"
+          state: absent
+      when: atuin.rc != 0
+      check_mode: false
+      # Install starship
+    - name: Gather installed starship version, if there is any
+      shell:
+        cmd: starship --version
+      register: starship
+      check_mode: false
+      changed_when: false
+      failed_when: starship.rc != 0 and starship.rc != 127
+    - block:
+      - name: Create temporary file for starship script
+        ansible.builtin.tempfile:
+          state: file
+          suffix: temp
+        register: starship_script
+      - name: Download starship install script
+        ansible.builtin.get_url:
+          url: https://starship.rs/install.sh
+          dest: "{{ starship_script.path }}"
+          mode: "700"
+          force: true
+      - name: Install starship
+        ansible.builtin.script:
+          cmd: "{{ starship_script.path }} -y"
+      - name: Remove file
+        ansible.builtin.file:
+          path: "{{ starship_script.path}}"
+          state: absent
+      when: starship.rc != 0
+      check_mode: false
+      # Install chezmoi
+    - name: Gather installed chezmoi version, if there is any
+      shell:
+        cmd: chezmoi --version
+      register: chezmoi
+      check_mode: false
+      changed_when: false
+      failed_when: chezmoi.rc != 0 and chezmoi.rc != 127
+    - block:
+      - name: Create temporary file for chezmoi script
+        ansible.builtin.tempfile:
+          state: file
+          suffix: temp
+        register: chezmoi_script
+      - name: Download chezmoi install script
+        ansible.builtin.get_url:
+          url: https://get.chezmoi.io
+          dest: "{{ chezmoi_script.path }}"
+          mode: "700"
+          force: true
+      - name: Install chezmoi
+        ansible.builtin.script:
+          cmd: "{{ chezmoi_script.path }} init --apply aliciabytes --promptDefaults"
+          chdir: "{{ lookup('env', 'HOME') }}"
+      - name: Remove file
+        ansible.builtin.file:
+          path: "{{ chezmoi_script.path}}"
+          state: absent
+      when: chezmoi.rc != 0
+      check_mode: false

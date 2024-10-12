@@ -1,0 +1,22 @@
+- name: Upgrade packages and clean up old packages
+  become: true
+  block:
+    - name: Update the cache
+      ansible.builtin.dnf:
+        update_cache: true
+      changed_when: false
+    - name: Install packages
+      ansible.builtin.dnf:
+        name:
+          - fish
+          - git
+          - wireguard-tools
+          - steam
+        state: latest
+    - name: Automatically remove packages
+      ansible.builtin.dnf:
+        autoremove: true
+    - name: Upgrade all existing packages
+      ansible.builtin.dnf:
+        name: "*"
+        state: latest

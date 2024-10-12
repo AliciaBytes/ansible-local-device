@@ -1,0 +1,44 @@
+- hosts: localhost
+  connection: local
+  become: false
+  vars:
+  vars_files:
+    - "{{ playbook_dir }}/vars/local-config.yml"
+  roles:
+  tasks:
+    - ansible.builtin.include_tasks:
+        file: "{{ playbook_dir }}/tasks/harden-root.yml"
+      tags:
+        - configuration
+        - general_settings
+    - ansible.builtin.include_tasks:
+        file: "{{ playbook_dir }}/tasks/general-settings.yml"
+      tags:
+        - configuration
+        - general_settings
+
+    - ansible.builtin.include_tasks:
+        file: "{{ playbook_dir }}/tasks/packages.yml"
+        apply:
+          tags:
+            - packages
+            - maintenance
+      tags:
+        - packages
+        - maintenance
+
+    - ansible.builtin.include_tasks:
+        file: "{{ playbook_dir }}/tasks/fonts.yml"
+        apply:
+          tags:
+            - fonts
+            - maintenance
+      tags:
+        - fonts
+        - maintenance
+
+  handlers:
+    - ansible.builtin.import_tasks: "{{ playbook_dir }}/handlers/services.yml"
+      tags: always
+    - ansible.builtin.import_tasks: "{{ playbook_dir }}/handlers/systems.yml"
+      tags: always

@@ -1,0 +1,23 @@
+- name: Upgrade packages and clean up old packages
+  become: true
+  block:
+    - name: Install packages
+      ansible.builtin.apt:
+        name:
+          - git
+          - wireguard
+          - fish
+          - steam
+        state: latest
+    - name: Update the apt cache
+      ansible.builtin.apt:
+        update_cache: true
+      changed_when: false
+    - name: Automatically remove packages
+      ansible.builtin.apt:
+        autoclean: true
+        autoremove: true
+    - name: Upgrade all existing packages
+      ansible.builtin.apt:
+        name: "*"
+        state: latest

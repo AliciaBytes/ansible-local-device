@@ -1,0 +1,30 @@
+- name: Upgrade packages and clean up old packages
+  block:
+    - name: "Setting up packages for {{ ansible_distribution }}"
+      ansible.builtin.include_tasks:
+        file: "{{ playbook_dir }}/tasks/packages/{{ ansible_distribution }}.yml"
+        apply:
+          tags:
+            - packages
+            - maintenance
+    - name: "Setting up packages for {{ ansible_os_family }}"
+      ansible.builtin.include_tasks:
+        file: "{{ playbook_dir }}/tasks/packages/{{ ansible_os_family }}.yml"
+        apply:
+          tags:
+            - packages
+            - maintenance
+    - name: "Setting up packages for Flatpak"
+      ansible.builtin.include_tasks:
+        file: "{{ playbook_dir }}/tasks/packages/Flatpak.yml"
+        apply:
+          tags:
+            - packages
+            - maintenance
+    - name: "Setting up manual packages"
+      ansible.builtin.include_tasks:
+        file: "{{ playbook_dir }}/tasks/packages/Manual.yml"
+        apply:
+          tags:
+            - packages
+            - maintenance

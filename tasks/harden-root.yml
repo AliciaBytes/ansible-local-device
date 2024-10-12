@@ -1,0 +1,38 @@
+- name: Harden root user
+  become: true
+  tags:
+    - configuration
+    - general_settings
+  block:
+    - name: Disable root login
+      ansible.builtin.lineinfile:
+        path: /etc/ssh/sshd_config
+        state: present
+        regexp: '^#?\s*PermitRootLogin(.*)'
+        line: "PermitRootLogin no"
+      notify:
+      - Restart SSH
+
+    - name: Disable password authentication
+      ansible.builtin.lineinfile:
+        path: /etc/ssh/sshd_config
+        state: present
+        regexp: '^#?\s*PasswordAuthentication(.*)$'
+        line: 'PasswordAuthentication no'
+      notify:
+      - Restart SSH
+
+    - name: Set random root user password
+      ansible.builtin.user:
+        name: "root"
+        password: "{{ lookup('ansible.builtin.password', '/dev/null', encrypt='sha512_crypt') }}"
+        password_lock: true
+        state: present
+      changed_when: false
+
+    - name: Delete authorized keys for root
+      ansible.posix.authorized_key:
+        user: "root"
+        state: present
+        key: ""
+        exclusive: true

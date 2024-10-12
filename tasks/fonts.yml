@@ -1,0 +1,12 @@
+- name: Install additional fonts
+  block:
+    - name: Ensure fonts directory exists
+      file:
+        path: "{{ lookup('env', 'HOME') }}/.fonts"
+        state: directory
+    - name: Download and install Fira Code
+      ansible.builtin.unarchive:
+        src: https://github.com/ryanoasis/nerd-fonts/releases/latest/download/FiraCode.zip
+        dest: "{{ lookup('env', 'HOME') }}/.fonts/"
+        remote_src: yes
+        creates: "{{ lookup('env', 'HOME') }}/.fonts/FiraCodeNerdFont-Regular.ttf"
