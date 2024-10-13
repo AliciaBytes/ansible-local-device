@@ -15,6 +15,7 @@
           - fish
           - git
           - helix
+          - nodejs
           - podman
           - podman-docker
           - podman-compose
