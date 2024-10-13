@@ -8,10 +8,20 @@
     - name: Install packages
       ansible.builtin.dnf:
         name:
+          - calibre
+          - filezilla
           - fish
           - git
-          - wireguard-tools
+          - helix
+          - podman
+          - podman-docker
+          - podman-compose
+          - qbittorrent
+          - solaar
+          - solaar-udev
           - steam
+          - wireguard-tools
+          - yakuake
         state: latest
     - name: Automatically remove packages
       ansible.builtin.dnf:
