@@ -14,8 +14,10 @@
           - fr.romainvigier.MetadataCleaner
           - info.portfolio_performance.PortfolioPerformance
           - io.github.peazip.PeaZip
+          - io.github.peazip.PeaZip
           - io.missioncenter.MissionCenter
           - io.podman_desktop.PodmanDesktop
           - it.mijorus.gearlever
           - md.obsidian.Obsidian
+          - net.ankiweb.Anki
         state: latest
