@@ -1,0 +1,9 @@
+[Unit]
+Description=Enables bluetooth after sleep
+After=suspend.target
+
+[Service]
+ExecStart=/usr/local/bin/start_bluetooth
+
+[Install]
+WantedBy=suspend.target
