@@ -1,0 +1,9 @@
+[Unit]
+Description=Disables bluetooth before sleep
+Before=suspend.target
+
+[Service]
+ExecStart=/usr/local/bin/turn_off_bluetooth
+
+[Install]
+WantedBy=suspend.target

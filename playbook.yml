@@ -37,6 +37,18 @@
         - fonts
         - maintenance
 
+    - ansible.builtin.include_tasks:
+        file: "{{ playbook_dir }}/tasks/bluetooth-suspension.yml"
+        apply:
+          tags:
+            - bluetooth
+            - system
+            - maintenance
+      tags:
+        - bluetooth
+        - system
+        - maintenance
+
   handlers:
     - ansible.builtin.import_tasks: "{{ playbook_dir }}/handlers/services.yml"
       tags: always
